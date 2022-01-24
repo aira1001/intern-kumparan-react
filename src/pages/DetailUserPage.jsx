@@ -10,13 +10,14 @@ import axios from "axios";
 import Grid from '@mui/material/Grid';
 import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css';
-import { Gallery, Item } from 'react-photoswipe-gallery';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ScrollTop from '../components/ScrollTop';
+import { useNavigate } from 'react-router-dom';
+
 
 const ItemText = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -61,9 +62,13 @@ export default function DetailUserPage(props) {
         setDataPhoto(res.data);
         return res.data;
       });
+       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
- 
+  let navigate = useNavigate();
+  let handleClickImage = (idPhotoSelect) => {
+    navigate(`/user-detail-page/detail-photo/${idPhotoSelect}`);
+  }
   return (
     <React.Fragment>
         <CssBaseline />
@@ -162,17 +167,10 @@ export default function DetailUserPage(props) {
                                     <Grid container justify Content="center" spacing={spacing}>
                                         {dataPhoto.filter((v) => v.albumId == item.id).map((v) => (
                                             <Grid key={v.thumbnailUrl} item sx={{marginBottom:"5px"}}>
-                                            <Paper sx={{ height: 230, width: 150 }}>
-                                                <Item
-                                                    original={v.thumbnailUrl}
-                                                    thumbnail={v.thumbnailUrl}
-                                                >
-                                                    {({ ref, open }) => (
-                                                         <Img alt="complex" src={v.thumbnailUrl} ref={ref} onClick={open}/>     
-                                                    )}
-                                                    </Item>                                  
-                                                    <Typography align="center" sx={{marginTop:"5px"}}>{item.title}</Typography>
-                                                </Paper>
+                                            <Paper sx={{ height: 230, width: 150 }} >
+                                              <Img alt="complex" src={v.thumbnailUrl} onClick={()=>handleClickImage(v.id)} sx={{cursor:"pointer"}}/>     
+                                              <Typography align="center" sx={{marginTop:"5px"}}>{item.title}</Typography>
+                                            </Paper>
                                             </Grid>
                                         ))}
                                     </Grid>
@@ -181,29 +179,7 @@ export default function DetailUserPage(props) {
                         </div>
                     )
                 })}  
-            </Stack>
-                <Gallery>
-                    <Item
-                    original="https://placekitten.com/1024/768?image=1"
-                    thumbnail="https://placekitten.com/80/60?image=1"
-                    width="1024"
-                    height="768"
-                    >
-                    {({ ref, open }) => (
-                        <img ref={ref} onClick={open} src="https://placekitten.com/80/60?image=1" />
-                    )}
-                    </Item>
-                    <Item
-                    original="https://placekitten.com/1024/768?image=2"
-                    thumbnail="https://placekitten.com/80/60?image=2"
-                    width="1024"
-                    height="768"
-                    >
-                    {({ ref, open }) => (
-                        <img ref={ref} onClick={open} src="https://placekitten.com/80/60?image=2" />
-                    )}
-                    </Item>
-                </Gallery>    
+            </Stack> 
           </Box>
         )
     })}

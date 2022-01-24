@@ -39,6 +39,7 @@ export default function DetailPost(props) {
         setDataComment(res.data);
         return res.data;
       });
+       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
